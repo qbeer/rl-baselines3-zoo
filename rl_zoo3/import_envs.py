@@ -55,10 +55,21 @@ def create_no_vel_env(env_id: str) -> Callable[[Optional[str]], gym.Env]:
 
     return make_env
 
-
 for env_id in MaskVelocityWrapper.velocity_indices.keys():
     name, version = env_id.split("-v")
     register(
         id=f"{name}NoVel-v{version}",
         entry_point=create_no_vel_env(env_id),  # type: ignore[arg-type]
     )
+
+
+## NOTE: adding custom WSI environment
+from sys import path
+path.append("/home/qbeer/GitHub/rl-pathologist")
+
+gym.register(
+    id="WSIEnv-v0",
+    entry_point="rl_pathologist.wsi_env:WSIEnv",
+    reward_threshold=1000.0,
+    max_episode_steps=1_000
+)
